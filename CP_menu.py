@@ -1,6 +1,15 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+from sklearn.preprocessing import Imputer, RobustScaler
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense
+from sklearn.svm import SVC
+
 
 # * Data Wrangling Definitions ================================================================
 
