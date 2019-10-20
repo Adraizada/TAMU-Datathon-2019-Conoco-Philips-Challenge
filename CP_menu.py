@@ -84,6 +84,69 @@ def switchAlgos(argument):
     switcher.get(argument, "Invalid Algorithm")
 
 Algorithm = input("Please select your algorithm:")
+def SupportVector(train_data,test_data)
+{
+    print('this function is for SVC')
+    data= train_data
+    data.describe(include="all")
+    feature =  data.iloc[:,2:]
+    target = data.iloc[:,1]
+    replace = imp.fit_transform(feature)
+    robust = RobustScaler()
+    X_scale = robust.fit_transform(replace)
+    from sklearn.model_selection import RandomizedSearchCV, KFold, train_test_split
+    cv = KFold(n_splits = 3, shuffle = True)
+    X_train, X_test, y_train, y_test = train_test_split(X_scale, target, test_size = 0.3, stratify = target)
+    svc = SVC(C = 1.1, gamma = 0.01)
+    c = [1.10,100]
+    gam = [0.01,0.1]
+    cv = KFold(n_splits = 2, shuffle = True)
+    param_dist = dict(C = c, gamma =gam)
+    grid = RandomizedSearchCV(svc, param_dist, cv = cv, n_iter = 3)
+    svc.fit(X_train, y_train)
+    X_test_thing = test_data.iloc[:,1:]
+    X_t = X_test_thing.replace('na', np.nan)
+    X_new_t = imp.fit_transform(X_t)
+    X_scale_t = robust.transform(X_new_t)
+    y_pred = svc.predict(X_scale_t)
+    export = test_data[['id']]
+    export['target'] = y_pred
+    export.to_csv('prediction.csv')
+
+    }
+def neuralnetworks(train_data,test_data)
+{
+    print('this function is for the neural networks program')
+    train_d2=imp.fit_transform(train_data)
+    train_d2[0,:]
+    feature =  train_d2[:,2:]
+    target = train_d2[:,1]
+    train_d3 = imp.fit_transform(feature)
+    X_train, X_test, y_train, y_test = train_test_split(feature, target, stratify = target)
+    X_train = tf.keras.utils.normalize(X_train, axis=1)
+    X_test = tf.keras.utils.normalize(X_test, axis=1)
+    model= tf.keras.models.Sequential()
+
+    model.add(tf.keras.layers.Dense(170,activation=tf.nn.relu))
+    model.add(tf.keras.layers.Dense(85, activation=tf.nn.relu))
+    model.add(tf.keras.layers.Dense(2, activation=tf.nn.sigmoid))
+
+    model.compile(optimizer='nadam',decay=1e-6, loss='sparse_categorical_crossentropy',metrics=['accuracy'])
+    model.fit(X_train, y_train, epochs=50, validation_data=[X_test, y_test])
+    print(model.evaluate(X_test, y_test))
+    model.save('conoco.model')
+    new_model= tf.keras.models.load_model('conoco.model')
+    test_d=test_data;
+    targ_t.replace('na', np.nan, inplace = True)
+    targ_im = imp.fit_transform(targ_t)
+    final_xtest = tf.keras.utils.normalize(targ_im, axis=1)
+    prediction = new_model.predict(final_xtest)
+    export = test_d[['id']]
+    y_pred = binarize(prediction[:,1].reshape(-1,1),threshold=0.49)
+    export['target'] = y_pred
+    export.to_csv('prediction.csv')
+
+    }
 
 # Run algorithm
 switchAlgos(Algorithm)
